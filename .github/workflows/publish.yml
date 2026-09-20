@@ -42,10 +42,9 @@ jobs:
           git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/hustcsh/tclaw-marketplace.git"
           git push -f origin gh-pages
 
-  # 可选：同步 Gitee 镜像（在 Gitee 上将 hustcsh/tclaw-marketplace 建为
-  # GitHub 仓库的镜像仓库后，调用 Gitee 强制同步 API；需配置 GITEE_TOKEN secret）
+  # 可选：同步 Gitee 镜像（需在 Gitee 将 hustcsh/tclaw-marketplace 建为 GitHub
+  # 仓库的镜像仓库，并配置 GITEE_TOKEN secret；未配置时本 job 自动跳过）
   sync-gitee:
-    if: ${{ secrets.GITEE_TOKEN != '' }}
     needs: build-and-publish
     runs-on: ubuntu-latest
     steps:
@@ -53,7 +52,11 @@ jobs:
         env:
           GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
         run: |
+          if [ -z "${GITEE_TOKEN}" ]; then
+            echo "GITEE_TOKEN not configured, skip gitee sync"
+            exit 0
+          fi
           curl -sf -X POST \
             -H "Authorization: Bearer ${GITEE_TOKEN}" \
             "https://gitee.com/api/v5/repos/hustcsh/tclaw-marketplace/pull" \
-            -d "access_token=${GITEE_TOKEN}" || echo "WARN: gitee sync skipped/failed (check mirror repo + token)"
+            -d "access_token=${GITEE_TOKEN}" || echo "WARN: gitee sync failed (check mirror repo + token)"

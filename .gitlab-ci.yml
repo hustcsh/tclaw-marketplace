@@ -1,0 +1,27 @@
+# 公司内网 GitLab（http://10.10.10.204）CI：与 GitHub Actions 等价
+# 迁移步骤：仓库推到 git@10.10.10.204:ai_projects/tclaw-marketplace.git 后此文件即生效。
+# 产物发布到 gh-pages 分支（raw 直链访问，不依赖 GitLab Pages）：
+#   http://10.10.10.204/ai_projects/tclaw-marketplace/-/raw/gh-pages/registry.json
+
+marketplace-publish:
+  stage: deploy
+  image: alpine:latest
+  variables:
+    TCLAW_REPO: "ai_projects/tclaw_project"
+  before_script:
+    - apk add --no-cache git jq zip bash coreutils
+  script:
+    # 拉取主仓库技能源（CI_JOB_TOKEN 需对该仓库有 read 权限）
+    - git clone --depth 1 "https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/${TCLAW_REPO}.git" /tmp/tclaw
+    - ./scripts/build-registry.sh /tmp/tclaw/tclaw/skills public
+    # 发布到 gh-pages 分支
+    - cd public
+    - git init -b gh-pages .
+    - git config user.name "marketplace-ci"
+    - git config user.email "ci@tclaw.local"
+    - git add -A
+    - git commit -m "marketplace build $(date -u +%Y%m%dT%H%M%SZ)" || echo "nothing to commit"
+    - git remote add origin "https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
+    - git push -f origin gh-pages
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'

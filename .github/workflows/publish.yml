@@ -1,0 +1,59 @@
+name: publish-marketplace
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout marketplace
+        uses: actions/checkout@v4
+        with:
+          path: marketplace
+
+      - name: Checkout tclaw (skills source)
+        uses: actions/checkout@v4
+        with:
+          repository: hustcsh/tclaw_project
+          ref: main
+          path: tclaw
+
+      - name: Build registry + skill zips
+        run: |
+          cd marketplace
+          ./scripts/build-registry.sh ../tclaw/tclaw/skills public
+
+      - name: Publish to gh-pages
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd marketplace/public
+          git init -b gh-pages .
+          git config user.name "marketplace-ci"
+          git config user.email "ci@tclaw.local"
+          git add -A
+          git commit -m "marketplace build $(date -u +%Y%m%dT%H%M%SZ)" || echo "nothing to commit"
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/hustcsh/tclaw-marketplace.git"
+          git push -f origin gh-pages
+
+  # 可选：同步 Gitee 镜像（在 Gitee 上将 hustcsh/tclaw-marketplace 建为
+  # GitHub 仓库的镜像仓库后，调用 Gitee 强制同步 API；需配置 GITEE_TOKEN secret）
+  sync-gitee:
+    if: ${{ secrets.GITEE_TOKEN != '' }}
+    needs: build-and-publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Gitee mirror sync
+        env:
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+        run: |
+          curl -sf -X POST \
+            -H "Authorization: Bearer ${GITEE_TOKEN}" \
+            "https://gitee.com/api/v5/repos/hustcsh/tclaw-marketplace/pull" \
+            -d "access_token=${GITEE_TOKEN}" || echo "WARN: gitee sync skipped/failed (check mirror repo + token)"

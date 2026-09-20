@@ -1,0 +1,2 @@
+# 本地验证构建产物（CI 发布到 gh-pages 分支，不入 main）
+public/

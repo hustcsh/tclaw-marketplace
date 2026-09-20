@@ -26,6 +26,23 @@ jobs:
             exit 1
           fi
 
+      - name: Validate TCLAW_REPO_TOKEN against tclaw_project
+        env:
+          TCLAW_TOKEN: ${{ secrets.TCLAW_REPO_TOKEN }}
+        run: |
+          code=$(curl -s -o /tmp/resp.json -w "%{http_code}" \
+            -H "Authorization: Bearer ${TCLAW_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/hustcsh/tclaw_project)
+          if [ "${code}" != "200" ]; then
+            echo "::error::TCLAW_REPO_TOKEN 无法访问 hustcsh/tclaw_project（HTTP ${code}）："
+            cat /tmp/resp.json
+            echo ""
+            echo "排查清单：1) PAT 的 Resource owner 必须是 hustcsh；2) Repository access 勾选 Only select repositories 并包含 tclaw_project；3) Permissions 里 Contents = Read-only；4) token 未过期；5) secret 值粘贴完整无多余空格换行"
+            exit 1
+          fi
+          echo "token OK -> $(jq -r '.full_name + " (" + .visibility + ")"' /tmp/resp.json)"
+
       - name: Checkout tclaw (skills source)
         uses: actions/checkout@v4
         with:

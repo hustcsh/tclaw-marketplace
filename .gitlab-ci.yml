@@ -11,7 +11,8 @@ marketplace-publish:
   before_script:
     - apk add --no-cache git jq zip bash coreutils
   script:
-    # 拉取主仓库技能源（CI_JOB_TOKEN 需对该仓库有 read 权限）
+    # 拉取主仓库技能源：主仓库为 private，CI_JOB_TOKEN 需在 tclaw_project 的
+    # Settings → CI/CD → Token access 中将 tclaw-marketplace 加入允许列表
     - git clone --depth 1 "https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/${TCLAW_REPO}.git" /tmp/tclaw
     - ./scripts/build-registry.sh /tmp/tclaw/tclaw/skills public
     # 发布到 gh-pages 分支

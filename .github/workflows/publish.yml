@@ -17,12 +17,25 @@ jobs:
         with:
           path: marketplace
 
+      - name: Check TCLAW_REPO_TOKEN configured
+        env:
+          TCLAW_TOKEN: ${{ secrets.TCLAW_REPO_TOKEN }}
+        run: |
+          if [ -z "${TCLAW_TOKEN}" ]; then
+            echo "::error::secrets.TCLAW_REPO_TOKEN 未配置（主仓库为 private，GITHUB_TOKEN 无法跨仓库拉取）。请生成对 hustcsh/tclaw_project 只读 Contents 权限的 fine-grained PAT 并配置到本仓库 secrets。"
+            exit 1
+          fi
+
       - name: Checkout tclaw (skills source)
         uses: actions/checkout@v4
         with:
           repository: hustcsh/tclaw_project
           ref: main
           path: tclaw
+          # 主仓库为 private：GITHUB_TOKEN 无法跨仓库访问，必须用
+          # 对 tclaw_project 有 Contents:Read 权限的 fine-grained PAT
+          # （仓库 Settings → Secrets → Actions → TCLAW_REPO_TOKEN）
+          token: ${{ secrets.TCLAW_REPO_TOKEN }}
 
       - name: Build registry + skill zips
         run: |

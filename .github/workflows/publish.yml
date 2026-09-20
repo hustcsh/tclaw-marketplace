@@ -38,7 +38,11 @@ jobs:
           git config user.name "marketplace-ci"
           git config user.email "ci@tclaw.local"
           git add -A
-          git commit -m "marketplace build $(date -u +%Y%m%dT%H%M%SZ)" || echo "nothing to commit"
+          if ! git commit -m "marketplace build $(date -u +%Y%m%dT%H%M%SZ)"; then
+            echo "ERROR: nothing to commit — build produced empty public/"
+            ls -laR .
+            exit 1
+          fi
           git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/hustcsh/tclaw-marketplace.git"
           git push -f origin gh-pages
 

@@ -12,6 +12,8 @@ command -v jq >/dev/null || { echo "jq is required" >&2; exit 1; }
 command -v zip >/dev/null || { echo "zip is required" >&2; exit 1; }
 
 mkdir -p "${OUT_DIR}/dist"
+# 绝对路径（子 shell 会 cd 到技能目录，zip 目标不能用相对路径）
+out_abs="$(cd "${OUT_DIR}" && pwd)"
 
 entries="[]"
 count=0
@@ -26,9 +28,9 @@ for manifest in "${SKILLS_DIR}"/*/manifest.json; do
   fi
 
   zip_name="${name}-${version}.zip"
-  zip_path="${OUT_DIR}/dist/${zip_name}"
+  zip_path="${out_abs}/dist/${zip_name}"
   # zip 根 = 技能目录内容（SKILL.toml/SKILL.md/manifest.json 均在归档根）
-  (cd "${SKILLS_DIR}" && rm -f "${zip_name}" && zip -qr "${zip_path}" "${name}")
+  (cd "${skill_dir}/.." && rm -f "${zip_name}" && zip -qr "${zip_path}" "${name}")
   sha="$(sha256sum "${zip_path}" | cut -d' ' -f1)"
   size="$(stat -c%s "${zip_path}")"
 

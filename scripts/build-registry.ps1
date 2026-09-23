@@ -1,4 +1,4 @@
-# build-registry.ps1 —— Windows 本地验证版（与 build-registry.sh 产物一致）
+﻿# build-registry.ps1 —— Windows 本地验证版（与 build-registry.sh 产物一致）
 # 用法: pwsh ./scripts/build-registry.ps1 -SkillsDir <tclaw-skills-dir> [-OutDir public]
 param(
     [Parameter(Mandatory = $true)][string]$SkillsDir,
@@ -20,10 +20,29 @@ foreach ($manifest in $manifests) {
     }
     $zipName = "$($meta.name)-$($meta.version).zip"
     $zipPath = Join-Path $OutDir "dist/$zipName"
-    if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
-    Compress-Archive -Path (Join-Path $skillDir "*") -DestinationPath $zipPath
+    $tier = if ($meta.tier) { $meta.tier } else { "free" }
+
+    if ($tier -eq "premium") {
+        # 付费技能：dist 只放 AES 加密包（license-tool pack 预先产出到技能目录 pkg/ 下），
+        # 明文源码绝不打包进公开 dist；无加密包则跳过（等运营补包）
+        $encSrc = Get-ChildItem -Path (Join-Path $skillDir "pkg") -Filter *.enc -File -ErrorAction SilentlyContinue |
+            Select-Object -First 1
+        if (-not $encSrc) {
+            Write-Warning "skip $($meta.name)@$($meta.version): premium skill missing pkg/*.enc (run license-tool pack first)"
+            continue
+        }
+        $zipName = "$($meta.name)-$($meta.version).zip.enc"
+        $zipPath = Join-Path $OutDir "dist/$zipName"
+        Copy-Item $encSrc.FullName $zipPath -Force
+    } else {
+        # 免费技能：打包技能目录内容（排除 pkg/ 加密包存放目录）
+        if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
+        $items = Get-ChildItem -Path $skillDir | Where-Object { $_.Name -ne "pkg" }
+        Compress-Archive -Path $items.FullName -DestinationPath $zipPath
+    }
     $sha = (Get-FileHash $zipPath -Algorithm SHA256).Hash.ToLowerInvariant()
     $size = (Get-Item $zipPath).Length
+    $encNote = if ($tier -eq "premium") { " [premium, encrypted]" } else { "" }
 
     $entries += [ordered]@{
         name          = $meta.name
@@ -42,7 +61,7 @@ foreach ($manifest in $manifests) {
             [ordered]@{ platform = "any"; url = "dist/$zipName"; sha256 = $sha; size = $size }
         )
     }
-    Write-Host "  packaged $($meta.name)@$($meta.version) -> $zipName (sha256 $($sha.Substring(0,12))...)"
+    Write-Host "  packaged $($meta.name)@$($meta.version)$encNote -> $zipName (sha256 $($sha.Substring(0,12))...)"
 }
 
 $registry = [ordered]@{

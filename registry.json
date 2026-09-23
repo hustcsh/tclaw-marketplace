@@ -1,0 +1,416 @@
+{
+  "version": "0.2.0",
+  "min_client_version": "0.1.0",
+  "updated_at": "2026-09-23T07:30:04Z",
+  "skills": [
+    {
+      "display_name": "语音采集",
+      "description": "Control microphone capture and ASR on tclaw sidecar",
+      "type": "zeroclaw",
+      "tier": "free",
+      "agent_compat": [
+        "tclaw"
+      ],
+      "categories": [
+        "asr",
+        "audio"
+      ],
+      "permissions": [
+        "http:127.0.0.1:9876/audio/*"
+      ],
+      "compat": {
+        "zeroclaw": ">=0.8.5",
+        "body": ">=0.1.0"
+      },
+      "apis": [
+        "sidecar:1"
+      ],
+      "channel": "stable",
+      "name": "tclaw-asr",
+      "version": "0.1.0",
+      "downloads": [
+        {
+          "platform": "any",
+          "url": "dist/tclaw-asr-0.1.0.zip",
+          "sha256": "0fd5219ef78f978f2cbe8febb4939eaf15dcbd308439461e0161b87fe626929b",
+          "size": 1325
+        }
+      ]
+    },
+    {
+      "display_name": "摄像头与截屏",
+      "description": "Camera snap and screen capture on tclaw host",
+      "type": "zeroclaw",
+      "tier": "free",
+      "agent_compat": [
+        "tclaw"
+      ],
+      "categories": [
+        "camera",
+        "capture"
+      ],
+      "permissions": [
+        "http:127.0.0.1:9876/camera/*",
+        "http:127.0.0.1:9876/screen/*"
+      ],
+      "compat": {
+        "zeroclaw": ">=0.8.5",
+        "body": ">=0.1.0"
+      },
+      "apis": [
+        "sidecar:1"
+      ],
+      "channel": "stable",
+      "name": "tclaw-camera",
+      "version": "0.1.0",
+      "downloads": [
+        {
+          "platform": "any",
+          "url": "dist/tclaw-camera-0.1.0.zip",
+          "sha256": "2d5448ca23d183f5feda96c7cfbda921e6bd4bd5fd37e1960fd85cd3373df199",
+          "size": 1356
+        }
+      ]
+    },
+    {
+      "display_name": "连接状态",
+      "description": "Connection state gate and session queries for tclaw",
+      "type": "zeroclaw",
+      "tier": "free",
+      "agent_compat": [
+        "tclaw"
+      ],
+      "categories": [
+        "connect"
+      ],
+      "permissions": [
+        "http:127.0.0.1:9875/tclaw/*"
+      ],
+      "compat": {
+        "zeroclaw": ">=0.8.5",
+        "body": ">=0.1.0"
+      },
+      "apis": [
+        "connect:1"
+      ],
+      "channel": "stable",
+      "name": "tclaw-connect",
+      "version": "0.1.0",
+      "downloads": [
+        {
+          "platform": "any",
+          "url": "dist/tclaw-connect-0.1.0.zip",
+          "sha256": "a783dd5642be876a291b96a3381ff9661b3924b38ef7e89fd587a4bfd988ae65",
+          "size": 1411
+        }
+      ]
+    },
+    {
+      "display_name": "对话管理",
+      "description": "List, create, rename, delete conversations and load history via AI-services personal API",
+      "type": "zeroclaw",
+      "tier": "free",
+      "agent_compat": [
+        "tclaw-control"
+      ],
+      "categories": [
+        "conversation"
+      ],
+      "permissions": [
+        "http:{{ai_services_personal_url}}/api/v1/conversations/*"
+      ],
+      "compat": {
+        "zeroclaw": ">=0.8.5",
+        "control": ">=0.1.0"
+      },
+      "apis": [
+        "ai-services:1"
+      ],
+      "channel": "stable",
+      "name": "tclaw-control-conversation",
+      "version": "0.1.0",
+      "downloads": [
+        {
+          "platform": "any",
+          "url": "dist/tclaw-control-conversation-0.1.0.zip",
+          "sha256": "9c326a2a691f9f8ddc7cf6f3e0bf7783b21fe44fab09554a9449bba382da1c7c",
+          "size": 2475
+        }
+      ]
+    },
+    {
+      "display_name": "会议编排",
+      "description": "Orchestrate meeting start/end from the control side. Calls tclaw body sidecar (:9876) and AI-services meetings (:8093).",
+      "type": "zeroclaw",
+      "tier": "free",
+      "agent_compat": [
+        "tclaw-control"
+      ],
+      "categories": [
+        "meeting"
+      ],
+      "permissions": [
+        "http:{{tclaw_sidecar_url}}/meeting/*",
+        "http:{{ai_services_personal_url}}/api/v1/meetings/*"
+      ],
+      "compat": {
+        "zeroclaw": ">=0.8.5",
+        "control": ">=0.1.0"
+      },
+      "apis": [
+        "sidecar:1",
+        "ai-services:1"
+      ],
+      "channel": "stable",
+      "name": "tclaw-control-meeting",
+      "version": "0.1.0",
+      "downloads": [
+        {
+          "platform": "any",
+          "url": "dist/tclaw-control-meeting-0.1.0.zip",
+          "sha256": "7ae6fde05540acc6ce8a0e2883da2b3b3a0de7dabc4b4ae7ba4728626a5bac72",
+          "size": 3143
+        }
+      ]
+    },
+    {
+      "display_name": "日程管理",
+      "description": "Create, list, update, delete personal schedules via AI-services personal API",
+      "type": "zeroclaw",
+      "tier": "free",
+      "agent_compat": [
+        "tclaw-control"
+      ],
+      "categories": [
+        "schedule"
+      ],
+      "permissions": [
+        "http:{{ai_services_personal_url}}/api/v1/schedules/*"
+      ],
+      "compat": {
+        "zeroclaw": ">=0.8.5",
+        "control": ">=0.1.0"
+      },
+      "apis": [
+        "ai-services:1"
+      ],
+      "channel": "stable",
+      "name": "tclaw-control-schedule",
+      "version": "0.2.0",
+      "downloads": [
+        {
+          "platform": "any",
+          "url": "dist/tclaw-control-schedule-0.2.0.zip",
+          "sha256": "4f380a45024f786121c1ad3558042bb38691596de8156ec602bb106d2146fede",
+          "size": 3837
+        }
+      ]
+    },
+    {
+      "display_name": "投屏控制",
+      "description": "Start/stop screen share from control side to tclaw body via WebRTC. Emits ui_action to drive WebView.",
+      "type": "zeroclaw",
+      "tier": "free",
+      "agent_compat": [
+        "tclaw-control"
+      ],
+      "categories": [
+        "screen",
+        "screenshare"
+      ],
+      "permissions": [
+        "http:{{ai_services_personal_url}}/api/v1/meetings/castcode/*",
+        "http:{{tclaw_screen_receiver_url}}/screenshare/*"
+      ],
+      "compat": {
+        "zeroclaw": ">=0.8.5",
+        "control": ">=0.1.0"
+      },
+      "apis": [
+        "ai-services:1",
+        "screen-receiver:1"
+      ],
+      "channel": "stable",
+      "name": "tclaw-control-screenshare",
+      "version": "0.1.0",
+      "downloads": [
+        {
+          "platform": "any",
+          "url": "dist/tclaw-control-screenshare-0.1.0.zip",
+          "sha256": "d134364e79688355210366ce84ae5e3b94e8aab8a8a30d5771392c5f97aebb95",
+          "size": 3165
+        }
+      ]
+    },
+    {
+      "display_name": "待办管理",
+      "description": "Create, list, update, complete personal todos via AI-services personal API",
+      "type": "zeroclaw",
+      "tier": "free",
+      "agent_compat": [
+        "tclaw-control"
+      ],
+      "categories": [
+        "todo"
+      ],
+      "permissions": [
+        "http:{{ai_services_personal_url}}/api/v1/todos/*"
+      ],
+      "compat": {
+        "zeroclaw": ">=0.8.5",
+        "control": ">=0.1.0"
+      },
+      "apis": [
+        "ai-services:1"
+      ],
+      "channel": "stable",
+      "name": "tclaw-control-todo",
+      "version": "0.1.0",
+      "downloads": [
+        {
+          "platform": "any",
+          "url": "dist/tclaw-control-todo-0.1.0.zip",
+          "sha256": "782eed2bb4ecf8dfd8f3f96e99d38e80279d3dc864fddd2952bc22277444aa41",
+          "size": 2252
+        }
+      ]
+    },
+    {
+      "display_name": "显示布局",
+      "description": "Dynamic layout, PiP, and layer visibility for tclaw-ui compositor",
+      "type": "zeroclaw",
+      "tier": "free",
+      "agent_compat": [
+        "tclaw"
+      ],
+      "categories": [
+        "display"
+      ],
+      "permissions": [
+        "http:127.0.0.1:9876/display/*"
+      ],
+      "compat": {
+        "zeroclaw": ">=0.8.5",
+        "body": ">=0.1.0"
+      },
+      "apis": [
+        "sidecar:1"
+      ],
+      "channel": "stable",
+      "name": "tclaw-display",
+      "version": "0.1.0",
+      "downloads": [
+        {
+          "platform": "any",
+          "url": "dist/tclaw-display-0.1.0.zip",
+          "sha256": "fa2df70eaa4b84f172d9f62d7f751300765174f4ea0fae02b8aa2b5632493b8a",
+          "size": 1620
+        }
+      ]
+    },
+    {
+      "display_name": "会议控制",
+      "description": "Start and end tclaw meetings with meeting_type policy",
+      "type": "zeroclaw",
+      "tier": "free",
+      "agent_compat": [
+        "tclaw"
+      ],
+      "categories": [
+        "meeting"
+      ],
+      "permissions": [
+        "http:127.0.0.1:9876/meeting/*"
+      ],
+      "compat": {
+        "zeroclaw": ">=0.8.5",
+        "body": ">=0.1.0"
+      },
+      "apis": [
+        "sidecar:1"
+      ],
+      "channel": "stable",
+      "name": "tclaw-meeting",
+      "version": "0.1.0",
+      "downloads": [
+        {
+          "platform": "any",
+          "url": "dist/tclaw-meeting-0.1.0.zip",
+          "sha256": "07b565f460fe0986273482d95db2eeed0f4cb7d88323e2e25b9179e24f00a170",
+          "size": 1652
+        }
+      ]
+    },
+    {
+      "display_name": "屏幕共享",
+      "description": "Start and stop screen sharing on tclaw display",
+      "type": "zeroclaw",
+      "tier": "free",
+      "agent_compat": [
+        "tclaw"
+      ],
+      "categories": [
+        "screen",
+        "screenshare"
+      ],
+      "permissions": [
+        "http:127.0.0.1:9878/screenshare/*",
+        "http:127.0.0.1:9876/display/*"
+      ],
+      "compat": {
+        "zeroclaw": ">=0.8.5",
+        "body": ">=0.1.0"
+      },
+      "apis": [
+        "screen-receiver:1",
+        "sidecar:1"
+      ],
+      "channel": "stable",
+      "name": "tclaw-screen",
+      "version": "0.1.0",
+      "downloads": [
+        {
+          "platform": "any",
+          "url": "dist/tclaw-screen-0.1.0.zip",
+          "sha256": "ad1c6f33bf79207bbc9e0b83066be26e56dd6b729c06bda715ae7d3a37e3135d",
+          "size": 1435
+        }
+      ]
+    },
+    {
+      "display_name": "腾讯会议",
+      "description": "Control Tencent Meeting by natural language: local client control (join/mute/share/camera/leave) + cloud management (schedule/query/cancel)",
+      "type": "zeroclaw",
+      "tier": "premium",
+      "agent_compat": [
+        "tclaw"
+      ],
+      "categories": [
+        "meeting",
+        "wemeet"
+      ],
+      "permissions": [
+        "http:127.0.0.1:9875/tclaw/wemeet/*"
+      ],
+      "compat": {
+        "zeroclaw": ">=0.8.5",
+        "body": ">=0.1.0",
+        "wemeet": ">=3.0"
+      },
+      "apis": [
+        "connect:1"
+      ],
+      "channel": "stable",
+      "name": "tclaw-wemeet",
+      "version": "0.2.0",
+      "downloads": [
+        {
+          "platform": "any",
+          "url": "dist/tclaw-wemeet-0.2.0.zip.enc",
+          "sha256": "9eabe4001b13e6d3cd35d28364bfb6a3fca92fd66a9f8356f4d07f21cd92d5a4",
+          "size": 3735
+        }
+      ]
+    }
+  ]
+}
